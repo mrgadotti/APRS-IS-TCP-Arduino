@@ -1,13 +1,6 @@
-
 /* Libraries */
-//#include <Wire.h>
-//#include <SPI.h>
-//#include <Dhcp.h>
-//#include <Dns.h>
 #include <Ethernet.h>
 #include <EthernetClient.h>
-//#include <EthernetServer.h>
-//#include <EthernetUdp.h>
 
 /* Network Settings */
 byte mac[] = {0xDE, 0xAD, 0xBE, 0x00, 0xFE, 0x00};//Set your MAC Address here.
