@@ -6,26 +6,53 @@
 byte mac[] = {0xDE, 0xAD, 0xBE, 0x00, 0xFE, 0x00};//Set your MAC Address here.
 char SVR_NAME[] = "brazil.d2g.com";
 #define SVR_PORT 14579
-/* Define your callsign, passcode and location below */
+
+/***************************************************************/
+/*      Station parameters                                     */
+/***************************************************************/
+
+/* Define your callsign, passcode*/
 #define callsign "PP5MGT-1"
 #define passcode "00000"
 
-#define location "0000.00N/00000.00E"
-/* 
- *  Usar o exemplo do link:
- *  http://digined.pe1mew.nl/?How_to:Convert_coordinates
- *  Latitude -27.590348 Longitude -48.519487
- *  Latitude 2735.42S Longitude 048.31.17W 
- */
-#define location "@000000h2735.42S/04831.17W"
+/*
+    Usar o exemplo do link:
+    Obter pelo Google Maps:
+    Latitude -27.590348 Longitude -48.519487
+    Converter para o formato reconhecido pelo APRS:
+    http://digined.pe1mew.nl/?How_to:Convert_coordinates
+    Latitude 2735.42S Longitude 048.31.17W
+*/
+/* Define your location */
+#define location "2735.42S/04831.17W"
 
+/*
+    Define your station symbol
+    "-" Home
+    "$" Phone
+    "'" Plane
+    "`" Antenna
+    ">" Car
+    "Z" Windows 95
+    "," Scout
+    "?" Desktop Computer
 
-#define VER "1.0"
-#define SVR_PROMPT "javAPRSSrvr"
-#define SVR_VERIFIED "verified"
+    Can you find others symbols on APRS documentation
+*/
+#define sta_symbol "Z"
+
+/* Define your comment */
+#define comment "Arduino APRS-IS - pp5mgt@qsl.net"
 
 /* Update interval in minutes */
 int REPORT_INTERVAL = 10;
+
+/***************************************************************/
+
+/* Don not change anything bellow */
+
+#define VER "1.0"
+#define SVR_VERIFIED "verified"
 
 #define TO_LINE  10000
 
@@ -61,11 +88,10 @@ void loop()
     {
       Serial.println("Login OK");
       client.print(callsign);
-      //client.print(",WIDE1-1,WIDE2-1");
-      client.print(">APRS,TCPIP*,qAC,BRASIL:");
+      client.print(">APRS,TCPIP*,qAC,WIDE1-1,WIDE2-1,BRASIL:@000000h");
       client.print(location);
-	  // Coment string after "-"
-      client.print("-Arduino APRS-IS - pp5mgt@qsl.net");
+      client.print(sta_symbol);
+      client.print(comment);
       Serial.println("Data sent OK");
       delay(5000);
       client.stop();
