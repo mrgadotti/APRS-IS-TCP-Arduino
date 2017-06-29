@@ -1,3 +1,9 @@
+/*
+*	APRS Spot using Arduino and Ethernet Shield W5100 
+*	PP5MGT - Marcelo
+*	pp5mgt@qsl.net
+*/
+
 /* Libraries */
 #include <Ethernet.h>
 #include <EthernetClient.h>
