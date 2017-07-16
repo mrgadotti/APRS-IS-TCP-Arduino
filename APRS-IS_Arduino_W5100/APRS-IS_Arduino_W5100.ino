@@ -18,14 +18,13 @@ char SVR_NAME[] = "brazil.d2g.com";
 /***************************************************************/
 
 /* Define your callsign, passcode*/
-#define callsign "PP5MGT-1"
+#define callsign "PP5XXX"
 #define passcode "00000"
 
 /*
-    Usar o exemplo do link:
-    Obter pelo Google Maps:
+    Get location on Google Maps:
     Latitude -27.590348 Longitude -48.519487
-    Converter para o formato reconhecido pelo APRS:
+    APRS coordinate converter:
     http://digined.pe1mew.nl/?How_to:Convert_coordinates
     Latitude 2735.42S Longitude 048.31.17W
 */
@@ -45,13 +44,13 @@ char SVR_NAME[] = "brazil.d2g.com";
 
     Can you find others symbols on APRS documentation
 */
-#define sta_symbol "Z"
+#define sta_symbol "`"
 
 /* Define your comment */
 #define comment "Arduino APRS-IS - pp5mgt@qsl.net"
 
 /* Update interval in minutes */
-int REPORT_INTERVAL = 10;
+int REPORT_INTERVAL = 1;
 
 /***************************************************************/
 
@@ -67,14 +66,28 @@ EthernetClient client;
 
 void setup()
 {
-  Serial.begin(9600);
+Serial.begin(9600);
   delay(2000);
-  Serial.println();
+  
+  Serial.println("-----------------------------------------\n");
+  
   Serial.print("APRSduino ");
   Serial.println(VER);
-  Serial.println();
 
+  // Initializing NET
   initNet();
+
+  // Print user information
+  Serial.print("\nCallsing: ");
+  Serial.println(callsign);
+  
+  Serial.print("Location: ");
+  Serial.println(location);
+
+  Serial.print("Report interval in minutes: ");
+  Serial.println(REPORT_INTERVAL);
+  
+  Serial.println("\n-----------------------------------------\n");
 }
 
 void loop()
@@ -91,15 +104,16 @@ void loop()
     client.print(" vers APRSduino ");
     client.println(VER);
     if ( wait4content(&client, SVR_VERIFIED, 8) )
-    {
+    { // PP5MGT-1>APE001,TCPIP*,qAC,BRASIL:!2735.42S/04831.17WZArduino APRS-IS - pp5mgt@qsl.net
+      // If connected, send APRS data
       Serial.println("Login OK");
       client.print(callsign);
-      client.print(">APRS,TCPIP*,qAC,WIDE1-1,WIDE2-1,BRASIL:@000000h");
+      client.print(">APE001,TCPIP*,qAC,WIDE1-1,WIDE2-1,BRASIL:!");
       client.print(location);
       client.print(sta_symbol);
       client.print(comment);
       Serial.println("Data sent OK");
-      delay(5000);
+      delay(2000);
       client.stop();
       Serial.println("Server disconnected\n");
       delay((long)REPORT_INTERVAL * 60L * 1000L);
@@ -123,9 +137,10 @@ void loop()
   delay(5000);
 }
 
+/* Initializing network on Ethernet Shield*/
 void initNet()
 {
-  Serial.println("Initializing NET");
+  Serial.println("Initializing network");
 
   do {
   } while ( Ethernet.begin(mac) == 0 );
